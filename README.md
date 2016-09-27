@@ -4,12 +4,12 @@ To get these example collector, processor, and publisher plugins to build proper
 
 Also to test these plugins with Snap, you will need to have [Snap](https://github.com/intelsdi-x/snap) installed, check out these docs for [Snap setup details] (https://github.com/intelsdi-x/snap/blob/master/docs/BUILD_AND_TEST.md#getting-started).
 
-1.First get the plugin library repo:
+###1. Get the plugin library repo:
 `go get github.com/intelsdi-x/snap-plugin-lib-go` will add the repo to your $GOPATH
 
 note: if you want to contribute to this repository you should fork the snap-plugin-lib-go repo and open a PR.
 
-2.Once you have the repo downloaded go to the snap-plugin-lib-go folder and update to the newest versions of the package:
+###2. Go to the snap-plugin-lib-go folder and update to the newest versions of the package:
 
 ```
 $ cd snap-plugin-lib-go
@@ -44,7 +44,7 @@ $ glide up
 [INFO]	Project relies on 7 dependencies.
 ```
 
-3.You can then build the collector, processor, or publisher plugins in the examples folder.
+###3. Build the collector, processor, and/or publisher plugins in the examples folder.
     Use the `go build` command to generate the example binary files for the collector, processor, and publisher.
     option -o outputs the binary to the specified name 
 
@@ -54,7 +54,8 @@ $ go build -o example-processor examples/processor/main.go
 $ go build -o example-publisher examples/publisher/main.go 
 ```
 
-4.Once you build the plugins you can load them into Snap and watch them work. Check out more Snap commands [here](??) to load plugins, see the metric or plugin list, create tasks, and collect data.
+###4. Load plugins into Snap and watch them work. 
+Check out more Snap commands [here](??) to load plugins, see the metric or plugin list, create tasks, and collect data.
 
 ```
 $ export SNAP_PATH=$GOPATH/snap/build
@@ -102,7 +103,7 @@ test-file-publisher 	 1 		 publisher 	 false 		 loaded 	 Fri, 23 Sep 2016 17:44:
 
 ```
 
-5.create task file and run cmds- 
+###5. Create task file and run cmds- 
 
 task.yml
 
