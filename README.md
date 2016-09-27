@@ -1,19 +1,15 @@
-# snap-plugin-example
+#Snap Plugin Example
 
-To get these example collector, processor, and publisher plugins to build properly and work with Snap you will need to have the following installed on your $GOPATH:
-* [glide](https://glide.sh/) if you do not already have it 
-* [gPRC](http://www.grpc.io/docs/) `go get google.golang.org/grpc`
-If you don’t already have [Snap](https://github.com/intelsdi-x/snap) installed, check out these docs for [Snap setup details] (https://github.com/intelsdi-x/snap/blob/master/docs/BUILD_AND_TEST.md#getting-started).
+To get these example collector, processor, and publisher plugins to build properly and work with Snap you will need to have [glide](https://glide.sh/) installed on your $GOPATH.
 
-If already have Snap installed follow these steps:
+Also to test these plugins with Snap, you will need to have [Snap](https://github.com/intelsdi-x/snap) installed, check out these docs for [Snap setup details] (https://github.com/intelsdi-x/snap/blob/master/docs/BUILD_AND_TEST.md#getting-started).
 
-1. go to your intelsdi-x folder: 
-`$ cd $GOPATH/src/github.com/intelsdi-x`
+1. First get the plugin library repo:
+`go get github.com/intelsdi-x/snap-plugin-lib-go` will add the repo to your $GOPATH
 
-2. Fork the [Snap Plugin Library for Go Repository](https://github.com/intelsdi-x/snap-plugin-lib-go) & clone to the intelsdi-x folder:
-`$ git clone https://github.com/sarahjhh/snap-plugin-lib-go.git` (don’t forget to use your github username instead)!
+note: if you want to contribute to this repository you should fork the snap-plugin-lib-go repo and open a PR.
 
-3. Once you have the repo downloaded go to the snap-plugin-lib-go folder and update to the newest versions of the package:
+2. Once you have the repo downloaded go to the snap-plugin-lib-go folder and update to the newest versions of the package:
 
 ```
 $ cd snap-plugin-lib-go
@@ -45,18 +41,12 @@ $ glide up
 [INFO]	--> Exporting google.golang.org/grpc
 [INFO]	--> Exporting golang.org/x/net
 [INFO]	Replacing existing vendor dependencies
-[INFO]	Project relies on 7 dependencies. ```
-```
-4. You can test the main.go file by:
-```
-$ go run examples/collector/main.go 
-{"Meta":{"Type":0,"Name":"test-rand-collector","Version":1,"RPCType":2,"RPCVersion":1,"ConcurrencyCount":5,"Exclusive":false,"Unsecure":true,"CacheTTL":0,"RoutingStrategy":0},"ListenAddress":"127.0.0.1:56914","Type":0,"State":0,"ErrorMessage":""}
-Heartbeat started
-Heartbeat timeout reset
-Heartbeat timeout 1 of 3.  (Duration between checks 1.5s)Heartbeat timeout 2 of 3.  (Duration between checks 1.5s)Heartbeat timeout 3 of 3.  (Duration between checks 1.5s)Heartbeat timeout expired!
+[INFO]	Project relies on 7 dependencies.
 ```
 
-5. You can then build the collector, processor, or publisher plugins in the examples folder.
+3. You can then build the collector, processor, or publisher plugins in the examples folder.
+    1. Use the `go build` command to generate the example binary files for the collector, processor, and publisher.
+    2. option -o outputs the binary to the specified name 
 
 ```
 $ go build -o example-collector examples/collector/main.go
@@ -64,7 +54,7 @@ $ go build -o example-processor examples/processor/main.go
 $ go build -o example-publisher examples/publisher/main.go 
 ```
 
-6. Once you build the plugins you can load them into Snap and watch them work. Check out more Snap commands [here](??) to load plugins, see the metric or plugin list, create tasks, and collect data.
+4. Once you build the plugins you can load them into Snap and watch them work. Check out more Snap commands [here](??) to load plugins, see the metric or plugin list, create tasks, and collect data.
 
 ```
 $ export SNAP_PATH=$GOPATH/snap/build
@@ -108,6 +98,36 @@ NAME 			 VERSION 	 TYPE 		 SIGNED 	 STATUS 	 LOADED TIME
 test-rand-collector 	 1 		 collector 	 false 		 loaded 	 Fri, 23 Sep 2016 17:41:44 PDT
 test-reverse-processor 	 1 		 processor 	 false 		 loaded 	 Fri, 23 Sep 2016 17:44:12 PDT
 test-file-publisher 	 1 		 publisher 	 false 		 loaded 	 Fri, 23 Sep 2016 17:44:23 PDT
+
+
 ```
 
+create task file and run cmds- 
+
+task.yml
+
+```---
+  version: 1
+  schedule:
+    type: "simple"
+    interval: "1s"
+  max-failures: 10
+  workflow:
+    collect:
+      metrics:
+        /random/float: {}
+        /random/integer: {}
+        /random/string: {}
+      config:
+      process:
+        -
+          plugin_name: "test-reverse-processor"
+          process: null
+          publish:
+            -
+              plugin_name: "test-file-publisher"
+              config:
+                file: "/tmp/snap_published_grpc_file.log"
+
+```
 
