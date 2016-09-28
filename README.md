@@ -103,7 +103,7 @@ test-file-publisher 	 1 		 publisher 	 false 		 loaded 	 Fri, 23 Sep 2016 17:44:
 
 ```
 
-###5. Create task file and run cmds- 
+###5. You can use the following code to create a task.yml file for these examples. Discover [how tasks work](https://github.com/intelsdi-x/snap/blob/master/docs/TASKS.md).
 
 task.yml
 
